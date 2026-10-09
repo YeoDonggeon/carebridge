@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>케어브릿지 CareBridge</title>
+<meta name="description" content="외국인 요양보호사의 모국어 관찰메모를 AI가 비식별·번역·구조화하여 한국어 돌봄기록 초안으로 정리합니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230f766e'/><path d='M14 38c6-10 14-14 18-14s12 4 18 14' stroke='white' stroke-width='5' fill='none' stroke-linecap='round'/><circle cx='20' cy='42' r='4' fill='white'/><circle cx='44' cy='42' r='4' fill='white'/></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="currentColor"/><path d="M14 38c6-10 14-14 18-14s12 4 18 14" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="20" cy="42" r="4" fill="#fff"/><circle cx="44" cy="42" r="4" fill="#fff"/></svg>
+    <div><strong>케어브릿지</strong><span>CareBridge</span></div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="caregiver" aria-selected="true">① 요양보호사 기록</button>
+    <button role="tab" data-tab="manager">② 담당자 검토 <span id="pendingBadge" class="count" hidden></span></button>
+    <button role="tab" data-tab="about">소개</button>
+  </nav>
+  <div id="modeBadge" class="mode" title="AI 연결 상태">확인 중…</div>
+</header>
+
+<main>
+  <!-- ① 요양보호사 화면 -->
+  <section id="tab-caregiver" class="tab" role="tabpanel">
+    <div class="grid2">
+      <div class="card">
+        <div class="row between">
+          <h2 data-i18n="title">관찰메모 작성</h2>
+          <label class="inline">🌐
+            <select id="cgLang" aria-label="언어">
+              <option value="vi">Tiếng Việt</option>
+              <option value="zh">中文</option>
+              <option value="en">English</option>
+              <option value="tl">Filipino</option>
+              <option value="uz">Oʻzbekcha</option>
+              <option value="ne">नेपाली</option>
+              <option value="id">Bahasa Indonesia</option>
+              <option value="th">ไทย</option>
+              <option value="mn">Монгол</option>
+              <option value="ru">Русский</option>
+              <option value="ko">한국어</option>
+            </select>
+          </label>
+        </div>
+        <p class="hint" data-i18n="hint">편한 언어로 자유롭게 쓰세요. 이름·전화번호 등은 보내기 전에 자동으로 가려집니다.</p>
+        <div class="row gap">
+          <label class="field"><span data-i18n="shift">근무</span>
+            <select id="cgShift"><option value="주간">☀️ 주간 Day</option><option value="저녁">🌆 저녁 Evening</option><option value="야간">🌙 야간 Night</option></select>
+          </label>
+          <label class="field"><span data-i18n="caregiver">작성자</span>
+            <input id="cgName" placeholder="Nguyen T." autocomplete="off">
+          </label>
+        </div>
+        <textarea id="cgMemo" rows="9" data-i18n-ph="placeholder" placeholder="오늘 어르신의 식사, 배설, 수면, 기분, 특이사항을 적어 주세요."></textarea>
+        <div class="row between wrap">
+          <div class="row gap">
+            <button id="micBtn" class="ghost" type="button">🎤 <span data-i18n="voice">음성 입력</span></button>
+            <span id="charCount" class="muted small">0 / 4000</span>
+          </div>
+          <details class="samples">
+            <summary>예시 메모 불러오기</summary>
+            <div id="sampleList"></div>
+          </details>
+        </div>
+        <div class="row gap end">
+          <button id="previewBtn" class="secondary" type="button" data-i18n="preview">가림 미리보기</button>
+          <button id="submitBtn" class="primary" type="button" data-i18n="submit">보내기</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🔒 <span data-i18n="maskedTitle">AI로 보내지는 내용 (비식별)</span></h3>
+        <div id="maskedView" class="masked empty">왼쪽에서 메모를 쓰고 ‘가림 미리보기’를 누르세요.</div>
+        <div id="entityChips" class="chips"></div>
+        <div id="cgResult" hidden>
+          <h3>✅ <span data-i18n="sent">전달 완료</span></h3>
+          <div id="cgQuestions"></div>
+        </div>
+        <div id="cgInbox"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② 담당자 화면 -->
+  <section id="tab-manager" class="tab" role="tabpanel" hidden>
+    <div class="mgr">
+      <aside class="card list">
+        <div class="row between">
+          <h2>기록 대기열</h2>
+          <select id="filter" aria-label="필터"><option value="all">전체</option><option value="pending">검토 대기</option><option value="approved">승인됨</option></select>
+        </div>
+        <div id="stats" class="stats"></div>
+        <ul id="queue"></ul>
+        <details class="roster">
+          <summary>👥 대상자 명부(가명 매핑)</summary>
+          <p class="small muted">명부에 등록한 이름은 어떤 언어로 쓰여도 같은 가명으로 가려집니다. 이 정보는 이 기기에만 저장됩니다.</p>
+          <div class="row gap">
+            <input id="rName" placeholder="이름 (예: 김영자)">
+            <input id="rAlias" placeholder="다른 표기, 쉼표로 (Kim Young-ja, 金英子)">
+            <button id="rAdd" class="secondary" type="button">추가</button>
+          </div>
+          <ul id="rosterList" class="small"></ul>
+          <button id="resetAll" class="link danger" type="button">모든 기록·매핑 초기화</button>
+        </details>
+      </aside>
+      <div id="detail" class="card detail">
+        <div class="empty-state">
+          <p>왼쪽 대기열에서 기록을 선택하세요.</p>
+          <p class="small muted">요양보호사 화면에서 예시 메모를 보내면 이곳에 구조화 초안이 쌓입니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 소개 -->
+  <section id="tab-about" class="tab" role="tabpanel" hidden>
+    <div class="card prose">
+      <h2>케어브릿지는 무엇을 하나요?</h2>
+      <p>외국인 요양보호사가 <b>모국어 또는 서툰 한국어</b>로 남긴 관찰메모를, AI가 <b>① 비식별화 → ② 한국어 번역 → ③ 장기요양 기록 항목별 구조화 → ④ 위험 신호 표시</b>까지 처리해 돌봄인력 담당자가 검토·승인할 수 있는 초안으로 만듭니다. 담당자의 피드백은 다시 요양보호사의 언어로 번역되어 돌아갑니다.</p>
+      <ol class="flow">
+        <li><b>비식별화(기기 안)</b> 이름·전화번호·주민번호·주소·호실을 가명 토큰으로 바꿉니다. 원문 개인정보는 서버로 가지 않습니다.</li>
+        <li><b>생성형 AI 번역·구조화</b> 요양 기록 8개 항목(신체·식사·배설·수면·인지정서·투약·활동안전·기타)으로 정리하고, 원문에 없는 내용은 만들지 않도록 제약합니다.</li>
+        <li><b>위험 신호 분류</b> 즉시 보고 / 당일 확인 / 관찰 3단계, 원문 근거 인용을 함께 제시합니다.</li>
+        <li><b>사람이 최종 결정</b> AI 결과는 ‘초안’이며, 담당자가 수정·승인해야 기록이 확정됩니다.</li>
+        <li><b>역방향 소통</b> 담당자 피드백을 요양보호사 언어로 번역하고, 역번역으로 의미를 검증합니다.</li>
+      </ol>
+      <p class="small muted">본 서비스는 2026 AI 라이프 아이디어 챌린지 수상 후보작 「케어브릿지」를 AI로 구현한 프로토타입입니다. 모든 예시 인물·수치는 가상입니다. 의료적 판단을 대신하지 않습니다.</p>
+    </div>
+  </section>
+</main>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="deid.js"></script>
+<script src="demo-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

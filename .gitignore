@@ -1,0 +1,8 @@
+node_modules
+.env
+.vercel
+submission/
+demo/
+carebridge.zip
+.claude/
+CLAUDE.md
