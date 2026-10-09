@@ -1,0 +1,13 @@
+{
+  "name": "carebridge",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CareBridge — 외국인 요양보호사 관찰메모 AI 비식별·번역·구조화 서비스 (2026 AI 라이프 솔루션 챌린지)",
+  "scripts": {
+    "start": "node server.js",
+    "eval:deid": "node eval/eval_deid.js",
+    "eval:llm": "node eval/eval_llm.js"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}

@@ -1,0 +1,93 @@
+{
+  "summary": {
+    "samples": 16,
+    "languages": 9,
+    "pii_items": 25,
+    "recall": "72.0%",
+    "precision": "100.0%",
+    "f1": "83.7%",
+    "keep_rate": "100.0%",
+    "by_language": {
+      "vi": {
+        "samples": 2,
+        "recall": "75.0%"
+      },
+      "zh": {
+        "samples": 2,
+        "recall": "100.0%"
+      },
+      "en": {
+        "samples": 3,
+        "recall": "50.0%"
+      },
+      "tl": {
+        "samples": 1,
+        "recall": "100.0%"
+      },
+      "id": {
+        "samples": 1,
+        "recall": "100.0%"
+      },
+      "ko": {
+        "samples": 4,
+        "recall": "100.0%"
+      },
+      "uz": {
+        "samples": 1,
+        "recall": "100.0%"
+      },
+      "mn": {
+        "samples": 1,
+        "recall": "0.0%"
+      },
+      "ne": {
+        "samples": 1,
+        "recall": "0.0%"
+      }
+    }
+  },
+  "fails": [
+    {
+      "id": "h02",
+      "kind": "MISS(미가림)",
+      "value": "0901 234 567",
+      "note": ""
+    },
+    {
+      "id": "h06",
+      "kind": "MISS(미가림)",
+      "value": "115",
+      "note": ""
+    },
+    {
+      "id": "h07",
+      "kind": "MISS(미가림)",
+      "value": "Min-ho",
+      "note": ""
+    },
+    {
+      "id": "h07",
+      "kind": "MISS(미가림)",
+      "value": "204",
+      "note": ""
+    },
+    {
+      "id": "h15",
+      "kind": "MISS(미가림)",
+      "value": "Park",
+      "note": ""
+    },
+    {
+      "id": "h15",
+      "kind": "MISS(미가림)",
+      "value": "207",
+      "note": ""
+    },
+    {
+      "id": "h16",
+      "kind": "MISS(미가림)",
+      "value": "Lee",
+      "note": ""
+    }
+  ]
+}

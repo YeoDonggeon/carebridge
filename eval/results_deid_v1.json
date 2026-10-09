@@ -1,0 +1,89 @@
+{
+  "summary": {
+    "samples": 36,
+    "languages": 8,
+    "pii_items": 49,
+    "recall": "87.8%",
+    "precision": "100.0%",
+    "f1": "93.5%",
+    "keep_rate": "97.4%",
+    "by_language": {
+      "vi": {
+        "samples": 7,
+        "recall": "75.0%"
+      },
+      "zh": {
+        "samples": 6,
+        "recall": "100.0%"
+      },
+      "en": {
+        "samples": 8,
+        "recall": "100.0%"
+      },
+      "tl": {
+        "samples": 3,
+        "recall": "100.0%"
+      },
+      "id": {
+        "samples": 2,
+        "recall": "66.7%"
+      },
+      "ko": {
+        "samples": 8,
+        "recall": "100.0%"
+      },
+      "uz": {
+        "samples": 1,
+        "recall": "0.0%"
+      },
+      "ne": {
+        "samples": 1,
+        "recall": "100.0%"
+      }
+    }
+  },
+  "fails": [
+    {
+      "id": "vi02",
+      "kind": "MISS(미가림)",
+      "value": "Park",
+      "note": ""
+    },
+    {
+      "id": "vi06",
+      "kind": "MISS(미가림)",
+      "value": "Young-ja",
+      "note": "성 없이 이름만 — 규칙 기반 한계 사례"
+    },
+    {
+      "id": "vi07",
+      "kind": "MISS(미가림)",
+      "value": "Kang",
+      "note": ""
+    },
+    {
+      "id": "en08",
+      "kind": "BROKEN(보존실패)",
+      "value": "Song was playing",
+      "note": "약한 성씨 Song — 존칭 있을 때만"
+    },
+    {
+      "id": "id01",
+      "kind": "MISS(미가림)",
+      "value": "Kamar 204",
+      "note": "인도네시아어 호실 표기(Kamar) — 규칙 미포함 사례"
+    },
+    {
+      "id": "uz01",
+      "kind": "MISS(미가림)",
+      "value": "Kim",
+      "note": "우즈베크어 호칭(buvi) 뒤 결합·호실(Xona) — 규칙 미포함 사례"
+    },
+    {
+      "id": "uz01",
+      "kind": "MISS(미가림)",
+      "value": "305",
+      "note": "우즈베크어 호칭(buvi) 뒤 결합·호실(Xona) — 규칙 미포함 사례"
+    }
+  ]
+}

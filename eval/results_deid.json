@@ -1,0 +1,53 @@
+{
+  "summary": {
+    "samples": 36,
+    "languages": 8,
+    "pii_items": 49,
+    "recall": "98.0%",
+    "precision": "100.0%",
+    "f1": "99.0%",
+    "keep_rate": "100.0%",
+    "by_language": {
+      "vi": {
+        "samples": 7,
+        "recall": "91.7%"
+      },
+      "zh": {
+        "samples": 6,
+        "recall": "100.0%"
+      },
+      "en": {
+        "samples": 8,
+        "recall": "100.0%"
+      },
+      "tl": {
+        "samples": 3,
+        "recall": "100.0%"
+      },
+      "id": {
+        "samples": 2,
+        "recall": "100.0%"
+      },
+      "ko": {
+        "samples": 8,
+        "recall": "100.0%"
+      },
+      "uz": {
+        "samples": 1,
+        "recall": "100.0%"
+      },
+      "ne": {
+        "samples": 1,
+        "recall": "100.0%"
+      }
+    }
+  },
+  "fails": [
+    {
+      "id": "vi06",
+      "kind": "MISS(미가림)",
+      "value": "Young-ja",
+      "note": "성 없이 이름만 — 규칙 기반 한계 사례"
+    }
+  ]
+}

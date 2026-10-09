@@ -1,0 +1,18 @@
+[
+{"id":"h01","lang":"vi","text":"Sáng nay cụ bà Yoon Ok-hee ở phòng 210 kêu đau lưng, không muốn ra khỏi giường.","pii":["Yoon Ok-hee","210"],"keep":["đau lưng"]},
+{"id":"h02","lang":"vi","text":"Anh trai của bà Kim gọi đến số 0901 234 567 hỏi thăm.","pii":["Kim","0901 234 567"],"keep":["hỏi thăm"]},
+{"id":"h03","lang":"zh","text":"黄奶奶今天血糖有点高，晚饭后说头晕。","pii":["黄"],"keep":["头晕"]},
+{"id":"h04","lang":"zh","text":"住在312号的老人家夜里咳嗽，照顾他的是小王。","pii":["312号"],"keep":["咳嗽"]},
+{"id":"h05","lang":"en","text":"Ms. Hwang Jeong-ok's granddaughter visited. Her number is 010 4567 8910.","pii":["Hwang Jeong-ok","010 4567 8910"],"keep":["granddaughter"]},
+{"id":"h06","lang":"en","text":"Mr Seo in Rm 115 has swollen ankles again, both sides.","pii":["Seo","115"],"keep":["swollen ankles"]},
+{"id":"h07","lang":"en","text":"Min-ho, the son of the lady in 204, will come on Sunday.","pii":["Min-ho","204"],"keep":["Sunday"]},
+{"id":"h08","lang":"tl","text":"Si Lola Baek ay umiyak buong gabi, hinahanap ang asawa niya.","pii":["Baek"],"keep":["umiyak"]},
+{"id":"h09","lang":"id","text":"Ibu Shin di kamar 118 muntah dua kali setelah makan siang.","pii":["Shin","118"],"keep":["muntah"]},
+{"id":"h10","lang":"ko","text":"문영순 할머니 오늘 기저귀 세 번 갈았어요. 설사 했어요.","pii":["문영순"],"keep":["설사"]},
+{"id":"h11","lang":"ko","text":"옆방 할아버지가 소리 질러서 정 어르신 놀랐어요.","pii":["정 어르신"],"keep":["옆방 할아버지"]},
+{"id":"h12","lang":"ko","text":"보호자 연락처 042-555-1212, 아드님 이름 박준호 씨.","pii":["042-555-1212","박준호"],"keep":["아드님"]},
+{"id":"h13","lang":"ko","text":"노경자 어르신 1985년생 따님이 면회 왔어요. 생년월일: 1941.03.02 확인함.","pii":["노경자","1941.03.02"],"keep":["면회"]},
+{"id":"h14","lang":"uz","text":"Choi ota kechasi uxlamadi, oyog'i og'riyapti dedi.","pii":["Choi"],"keep":["uxlamadi"]},
+{"id":"h15","lang":"mn","text":"Park эмээ өнөөдөр хоолоо бүгдийг идсэн. Өрөө 207.","pii":["Park","207"],"keep":["хоолоо"]},
+{"id":"h16","lang":"ne","text":"हजुरआमा Lee लाई आज ज्वरो 38.2 आयो। नर्सलाई भनें।","pii":["Lee"],"keep":["38.2"]}
+]
