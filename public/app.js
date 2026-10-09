@@ -15,10 +15,25 @@
 
   // 요양보호사 화면 다국어 문구
   const I18N = {
-    ko: { title: '관찰메모 작성', hint: '편한 언어로 자유롭게 쓰세요. 이름·전화번호 등은 보내기 전에 자동으로 가려집니다.', shift: '근무', caregiver: '작성자', placeholder: '오늘 어르신의 식사, 배설, 수면, 기분, 특이사항을 적어 주세요.', voice: '음성 입력', preview: '가림 미리보기', submit: '보내기', maskedTitle: 'AI로 보내지는 내용 (비식별)', sent: '전달 완료', questions: '담당자가 확인하고 싶은 내용', inbox: '담당자 메시지', sentMsg: '기록이 담당자에게 전달되었습니다.' },
-    vi: { title: 'Ghi chép quan sát', hint: 'Hãy viết tự do bằng ngôn ngữ của bạn. Tên, số điện thoại… sẽ được tự động che trước khi gửi.', shift: 'Ca làm', caregiver: 'Người viết', placeholder: 'Hãy ghi lại việc ăn uống, đi vệ sinh, giấc ngủ, tâm trạng và điều đặc biệt của người cao tuổi hôm nay.', voice: 'Nói để nhập', preview: 'Xem bản đã che', submit: 'Gửi', maskedTitle: 'Nội dung gửi cho AI (đã ẩn danh)', sent: 'Đã gửi', questions: 'Quản lý muốn hỏi thêm', inbox: 'Tin nhắn từ quản lý', sentMsg: 'Đã gửi ghi chép cho quản lý.' },
-    zh: { title: '写观察记录', hint: '请用您习惯的语言自由书写。姓名、电话等会在发送前自动隐藏。', shift: '班次', caregiver: '记录人', placeholder: '请写下老人今天的饮食、排便、睡眠、情绪和特别情况。', voice: '语音输入', preview: '预览隐藏效果', submit: '发送', maskedTitle: '发送给AI的内容（已去标识）', sent: '已发送', questions: '负责人想确认的问题', inbox: '负责人消息', sentMsg: '记录已发送给负责人。' },
-    en: { title: 'Write an observation note', hint: 'Write freely in your own language. Names, phone numbers, etc. are hidden automatically before sending.', shift: 'Shift', caregiver: 'Written by', placeholder: "Write about today's meals, toileting, sleep, mood and anything unusual.", voice: 'Voice input', preview: 'Preview masking', submit: 'Send', maskedTitle: 'What is sent to the AI (de-identified)', sent: 'Sent', questions: 'Questions from your manager', inbox: 'Messages from manager', sentMsg: 'Your note was sent to the manager.' }
+    ko: { title: '관찰메모 작성', hint: '편한 언어로 자유롭게 쓰세요. 이름·전화번호 등은 보내기 전에 자동으로 가려집니다.', shift: '근무', caregiver: '작성자', placeholder: '오늘 어르신의 식사, 배설, 수면, 기분, 특이사항을 적어 주세요.', voice: '음성 입력', preview: '가림 미리보기', submit: '보내기', maskedTitle: 'AI로 보내지는 내용 (비식별)', sent: '전달 완료', questions: '담당자가 확인하고 싶은 내용', inbox: '담당자 메시지', sentMsg: '기록이 담당자에게 전달되었습니다.', emptyPreview: '왼쪽에서 메모를 쓰고 ‘가림 미리보기’를 누르세요.', emptyMemo: '메모가 비어 있습니다.', noPii: '가릴 개인정보가 발견되지 않았습니다. 이름을 호칭 없이 썼다면 담당자 화면의 ‘대상자 명부’에 등록하세요.' },
+    vi: { title: 'Ghi chép quan sát', hint: 'Hãy viết tự do bằng ngôn ngữ của bạn. Tên, số điện thoại… sẽ được tự động che trước khi gửi.', shift: 'Ca làm', caregiver: 'Người viết', placeholder: 'Hãy ghi lại việc ăn uống, đi vệ sinh, giấc ngủ, tâm trạng và điều đặc biệt của người cao tuổi hôm nay.', voice: 'Nói để nhập', preview: 'Xem bản đã che', submit: 'Gửi', maskedTitle: 'Nội dung gửi cho AI (đã ẩn danh)', sent: 'Đã gửi', questions: 'Quản lý muốn hỏi thêm', inbox: 'Tin nhắn từ quản lý', sentMsg: 'Đã gửi ghi chép cho quản lý.', emptyPreview: 'Viết ghi chép rồi bấm “Xem bản đã che”.', emptyMemo: 'Ghi chép đang trống.', noPii: 'Không tìm thấy thông tin cá nhân cần che.' },
+    zh: { title: '写观察记录', hint: '请用您习惯的语言自由书写。姓名、电话等会在发送前自动隐藏。', shift: '班次', caregiver: '记录人', placeholder: '请写下老人今天的饮食、排便、睡眠、情绪和特别情况。', voice: '语音输入', preview: '预览隐藏效果', submit: '发送', maskedTitle: '发送给AI的内容（已去标识）', sent: '已发送', questions: '负责人想确认的问题', inbox: '负责人消息', sentMsg: '记录已发送给负责人。', emptyPreview: '写好记录后点击“预览隐藏效果”。', emptyMemo: '记录为空。', noPii: '未发现需要隐藏的个人信息。' },
+    en: { title: 'Write an observation note', hint: 'Write freely in your own language. Names, phone numbers, etc. are hidden automatically before sending.', shift: 'Shift', caregiver: 'Written by', placeholder: "Write about today's meals, toileting, sleep, mood and anything unusual.", voice: 'Voice input', preview: 'Preview masking', submit: 'Send', maskedTitle: 'What is sent to the AI (de-identified)', sent: 'Sent', questions: 'Questions from your manager', inbox: 'Messages from manager', sentMsg: 'Your note was sent to the manager.', emptyPreview: 'Write a note and press “Preview masking”.', emptyMemo: 'The note is empty.', noPii: 'No personal information to hide was found.' },
+    tl: { title: 'Isulat ang obserbasyon', hint: 'Sumulat nang malaya sa sarili mong wika. Awtomatikong itatago ang pangalan, numero ng telepono, atbp. bago ipadala.', shift: 'Shift', caregiver: 'Sumulat', placeholder: 'Isulat ang tungkol sa pagkain, pag-ihi at pagdumi, tulog, damdamin at anumang kakaiba ngayong araw.', voice: 'Magsalita para mag-type', preview: 'Silipin ang tinago', submit: 'Ipadala', maskedTitle: 'Ipapadala sa AI (walang pagkakakilanlan)', sent: 'Naipadala', questions: 'Mga tanong ng manager', inbox: 'Mensahe mula sa manager', sentMsg: 'Naipadala ang tala sa manager.', emptyPreview: 'Sumulat ng tala at pindutin ang “Silipin ang tinago”.', emptyMemo: 'Walang laman ang tala.', noPii: 'Walang nakitang personal na impormasyon na itatago.' },
+    id: { title: 'Tulis catatan pengamatan', hint: 'Tulis dengan bebas dalam bahasa Anda. Nama, nomor telepon, dll. disembunyikan otomatis sebelum dikirim.', shift: 'Sif', caregiver: 'Penulis', placeholder: 'Tuliskan makan, buang air, tidur, suasana hati, dan hal khusus lansia hari ini.', voice: 'Input suara', preview: 'Pratinjau samaran', submit: 'Kirim', maskedTitle: 'Isi yang dikirim ke AI (dianonimkan)', sent: 'Terkirim', questions: 'Pertanyaan dari manajer', inbox: 'Pesan dari manajer', sentMsg: 'Catatan telah dikirim ke manajer.', emptyPreview: 'Tulis catatan lalu tekan “Pratinjau samaran”.', emptyMemo: 'Catatan masih kosong.', noPii: 'Tidak ditemukan informasi pribadi untuk disamarkan.' },
+    th: { title: 'เขียนบันทึกการสังเกต', hint: 'เขียนได้อย่างอิสระด้วยภาษาของคุณ ชื่อ เบอร์โทร ฯลฯ จะถูกซ่อนโดยอัตโนมัติก่อนส่ง', shift: 'กะ', caregiver: 'ผู้เขียน', placeholder: 'เขียนเรื่องการกิน การขับถ่าย การนอน อารมณ์ และสิ่งผิดปกติของผู้สูงอายุวันนี้', voice: 'พูดเพื่อพิมพ์', preview: 'ดูส่วนที่ซ่อน', submit: 'ส่ง', maskedTitle: 'เนื้อหาที่ส่งให้ AI (ไม่ระบุตัวตน)', sent: 'ส่งแล้ว', questions: 'คำถามจากผู้จัดการ', inbox: 'ข้อความจากผู้จัดการ', sentMsg: 'ส่งบันทึกถึงผู้จัดการแล้ว', emptyPreview: 'เขียนบันทึกแล้วกด “ดูส่วนที่ซ่อน”', emptyMemo: 'บันทึกยังว่างอยู่', noPii: 'ไม่พบข้อมูลส่วนบุคคลที่ต้องซ่อน' },
+    ru: { title: 'Запись наблюдения', hint: 'Пишите свободно на своём языке. Имена, телефоны и т. п. будут автоматически скрыты перед отправкой.', shift: 'Смена', caregiver: 'Автор', placeholder: 'Опишите питание, туалет, сон, настроение и всё необычное у подопечного сегодня.', voice: 'Голосовой ввод', preview: 'Проверить скрытие', submit: 'Отправить', maskedTitle: 'Что отправляется ИИ (обезличено)', sent: 'Отправлено', questions: 'Вопросы от руководителя', inbox: 'Сообщения от руководителя', sentMsg: 'Запись отправлена руководителю.', emptyPreview: 'Напишите запись и нажмите «Проверить скрытие».', emptyMemo: 'Запись пуста.', noPii: 'Личные данные для скрытия не найдены.' },
+    uz: { title: 'Kuzatuv yozuvi', hint: 'O‘z tilingizda erkin yozing. Ism, telefon raqami va boshqalar yuborishdan oldin avtomatik yashiriladi.', shift: 'Smena', caregiver: 'Yozgan', placeholder: 'Bugun keksa kishining ovqatlanishi, hojatga borishi, uyqusi, kayfiyati va g‘ayrioddiy holatlarini yozing.', voice: 'Ovozli kiritish', preview: 'Yashirilganini ko‘rish', submit: 'Yuborish', maskedTitle: 'AIga yuboriladigan matn (anonim)', sent: 'Yuborildi', questions: 'Rahbarning savollari', inbox: 'Rahbardan xabarlar', sentMsg: 'Yozuv rahbarga yuborildi.', emptyPreview: 'Yozuvni yozib, “Yashirilganini ko‘rish” tugmasini bosing.', emptyMemo: 'Yozuv bo‘sh.', noPii: 'Yashiriladigan shaxsiy ma’lumot topilmadi.' },
+    ne: { title: 'अवलोकन टिप्पणी लेख्नुहोस्', hint: 'आफ्नै भाषामा खुलेर लेख्नुहोस्। नाम, फोन नम्बर आदि पठाउनुअघि आफैं लुकाइन्छ।', shift: 'सिफ्ट', caregiver: 'लेख्ने व्यक्ति', placeholder: 'आज वृद्धवृद्धाको खाना, दिसा-पिसाब, निद्रा, मनस्थिति र विशेष कुरा लेख्नुहोस्।', voice: 'बोलेर लेख्नुहोस्', preview: 'लुकाइएको हेर्नुहोस्', submit: 'पठाउनुहोस्', maskedTitle: 'AI लाई पठाइने सामग्री (पहिचान हटाइएको)', sent: 'पठाइयो', questions: 'प्रबन्धकका प्रश्नहरू', inbox: 'प्रबन्धकको सन्देश', sentMsg: 'टिप्पणी प्रबन्धकलाई पठाइयो।', emptyPreview: 'टिप्पणी लेखेर “लुकाइएको हेर्नुहोस्” थिच्नुहोस्।', emptyMemo: 'टिप्पणी खाली छ।', noPii: 'लुकाउनुपर्ने व्यक्तिगत जानकारी भेटिएन।' },
+    mn: { title: 'Ажиглалтын тэмдэглэл', hint: 'Өөрийн хэлээр чөлөөтэй бичээрэй. Нэр, утасны дугаар зэргийг илгээхээс өмнө автоматаар нууна.', shift: 'Ээлж', caregiver: 'Бичсэн', placeholder: 'Өнөөдөр ахмад настны хоол, бие засалт, нойр, сэтгэл санаа, онцгой зүйлийг бичнэ үү.', voice: 'Дуугаар оруулах', preview: 'Нуусныг харах', submit: 'Илгээх', maskedTitle: 'AI руу илгээх агуулга (хувийн мэдээлэлгүй)', sent: 'Илгээсэн', questions: 'Менежерийн асуулт', inbox: 'Менежерийн мессеж', sentMsg: 'Тэмдэглэлийг менежерт илгээлээ.', emptyPreview: 'Тэмдэглэл бичээд “Нуусныг харах” дарна уу.', emptyMemo: 'Тэмдэглэл хоосон байна.', noPii: 'Нуух хувийн мэдээлэл олдсонгүй.' }
+  };
+
+  // 가림 칩에 표시할 개인정보 유형 이름 (없는 언어는 영어)
+  const PII_T = {
+    ko: { NAME: '이름', PHONE: '전화번호', RRN: '주민번호', EMAIL: '이메일', ADDR: '주소', ROOM: '호실', DOB: '생년월일' },
+    vi: { NAME: 'Tên', PHONE: 'Số điện thoại', RRN: 'Số định danh', EMAIL: 'Email', ADDR: 'Địa chỉ', ROOM: 'Phòng', DOB: 'Ngày sinh' },
+    zh: { NAME: '姓名', PHONE: '电话', RRN: '身份证号', EMAIL: '邮箱', ADDR: '地址', ROOM: '房间号', DOB: '出生日期' },
+    en: { NAME: 'Name', PHONE: 'Phone', RRN: 'ID number', EMAIL: 'Email', ADDR: 'Address', ROOM: 'Room', DOB: 'Date of birth' }
   };
 
   // ---------- 상태(이 기기 localStorage) ----------
@@ -71,6 +86,9 @@
     const d = I18N[langSel.value] || I18N.en;
     $$('[data-i18n]', $('#tab-caregiver')).forEach(el => { if (d[el.dataset.i18n]) el.textContent = d[el.dataset.i18n]; });
     $$('[data-i18n-ph]').forEach(el => { if (d[el.dataset.i18nPh]) el.placeholder = d[el.dataset.i18nPh]; });
+    // 오른쪽 미리보기도 선택한 언어로 다시 그린다
+    if (memo.value.trim() && !$('#maskedView').classList.contains('empty')) preview();
+    else { $('#maskedView').className = 'masked empty'; $('#maskedView').textContent = d.emptyPreview; }
     renderInbox();
   }
   langSel.addEventListener('change', () => { try { localStorage.setItem('cb_lang', langSel.value); } catch (_) {} applyI18n(); });
@@ -94,16 +112,17 @@
     return esc(text).replace(/\[(어르신|보호자|직원)[A-Z]+\]|\[(전화번호|주민번호|이메일|주소|호실|생년월일)\]/g, m => '<span class="tok">' + m + '</span>');
   }
   function preview() {
-    if (!memo.value.trim()) { $('#maskedView').className = 'masked empty'; $('#maskedView').textContent = '메모가 비어 있습니다.'; $('#entityChips').innerHTML = ''; return null; }
+    const L = I18N[langSel.value] || I18N.en;
+    if (!memo.value.trim()) { $('#maskedView').className = 'masked empty'; $('#maskedView').textContent = L.emptyMemo; $('#entityChips').innerHTML = ''; return null; }
     const d = currentDeid();
     $('#maskedView').className = 'masked';
     $('#maskedView').innerHTML = highlightTokens(d.masked);
     const counts = {};
     d.entities.forEach(e => (counts[e.type] = (counts[e.type] || 0) + 1));
-    const TL = { NAME: '이름', PHONE: '전화번호', RRN: '주민번호', EMAIL: '이메일', ADDR: '주소', ROOM: '호실', DOB: '생년월일' };
+    const TL = PII_T[langSel.value] || PII_T.en;
     $('#entityChips').innerHTML = Object.keys(counts).length
-      ? Object.keys(counts).map(k => `<span class="chip">🔒 ${TL[k] || k} ${counts[k]}건 가림</span>`).join('')
-      : '<span class="small muted">가릴 개인정보가 발견되지 않았습니다. 이름을 호칭 없이 썼다면 담당자 화면의 ‘대상자 명부’에 등록하세요.</span>';
+      ? Object.keys(counts).map(k => `<span class="chip">🔒 ${esc(TL[k] || k)} ${langSel.value === 'ko' ? counts[k] + '건 가림' : '×' + counts[k]}</span>`).join('')
+      : `<span class="small muted">${esc(L.noPii)}</span>`;
     return d;
   }
   $('#previewBtn').addEventListener('click', preview);
@@ -250,6 +269,7 @@
       <div class="row gap"><input id="fbText" placeholder="예: 화장실 가실 때는 꼭 함께 가 주세요. 어지러우시면 바로 알려 주세요."><button id="fbSend" class="secondary" type="button">번역해서 보내기</button></div>
       <div class="actions">
         <button id="copyBtn" class="ghost" type="button">📋 기록지 텍스트 복사</button>
+        <button id="printBtn" class="ghost" type="button">🖨 기록지 인쇄</button>
         ${r.status === 'approved' ? '<button id="reopenBtn" class="ghost" type="button">승인 취소</button>' : '<button id="approveBtn" class="primary" type="button">✔ 검토 완료·승인</button>'}
       </div>`;
 
@@ -261,6 +281,7 @@
         ((R.risk_flags || []).length ? '\n[위험 신호]\n' + R.risk_flags.map(f => `- (${LV[f.level]}) ${show(f.finding)} → ${show(f.action)}`).join('\n') : '');
       (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => toast('복사되었습니다.'), () => { prompt('복사할 내용', txt); });
     });
+    $('#printBtn').addEventListener('click', () => printRecord(r));
     const ab = $('#approveBtn'); if (ab) ab.addEventListener('click', () => { r.status = 'approved'; r.approvedAt = new Date().toISOString(); save(); renderQueue(); renderDetail(); toast('승인되었습니다.'); });
     const rb = $('#reopenBtn'); if (rb) rb.addEventListener('click', () => { r.status = 'pending'; save(); renderQueue(); renderDetail(); });
     $('#fbSend').addEventListener('click', async () => {
@@ -282,6 +303,52 @@
       } catch (e) { toast('⚠️ ' + e.message); btn.disabled = false; btn.textContent = '번역해서 보내기'; }
     });
   }
+  // ---------- 내보내기 ----------
+  // 화면에 보이는 그대로(실명 보기 체크 여부 반영) 내보낸다. 기본은 가명 상태.
+  function riskText(r) {
+    return ((r.result && r.result.risk_flags) || []).map(f => `(${LV[f.level]}) ${show(f.finding)}`).join(' / ');
+  }
+  function printRecord(r) {
+    const R = r.result;
+    const rows = Object.keys(FIELDS).map(k => `<tr><th>${FIELDS[k]}</th><td>${esc(show(r.draft[k] || '')) || '<span class="na">언급 없음</span>'}</td></tr>`).join('');
+    const flags = (R.risk_flags || []).map(f => `<li><b>[${LV[f.level]}]</b> ${esc(show(f.finding))}<br><small>근거: “${esc(show(f.evidence_source))}” → ${esc(show(f.action))}</small></li>`).join('') || '<li>없음</li>';
+    const html = `<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>돌봄 관찰기록</title><style>
+      body{font-family:'Malgun Gothic',sans-serif;margin:24px;color:#111;font-size:13px}
+      h1{font-size:18px;margin:0 0 4px}.meta{color:#555;margin-bottom:12px}
+      table{width:100%;border-collapse:collapse;margin:8px 0 16px}th,td{border:1px solid #999;padding:6px 8px;vertical-align:top;text-align:left}
+      th{width:120px;background:#f2f2f2}.na{color:#999}h2{font-size:14px;margin:16px 0 4px}ul{margin:4px 0;padding-left:18px}li{margin-bottom:6px}
+      .sign{margin-top:28px;display:flex;gap:48px}.foot{margin-top:16px;color:#777;font-size:11px}</style></head><body>
+      <h1>돌봄 관찰기록 ${r.status === 'approved' ? '' : '(검토 전 초안)'}</h1>
+      <div class="meta">${new Date(r.createdAt).toLocaleString()} · ${esc(r.shift)} 근무 · 작성 ${esc(r.caregiver)} (${esc(LANGS[r.lang] || r.lang)} 원문)${r.approvedAt ? ' · 승인 ' + new Date(r.approvedAt).toLocaleString() : ''}</div>
+      <div><b>요약</b> ${esc(show(R.summary_ko || ''))}</div>
+      <table>${rows}</table>
+      <h2>위험 신호</h2><ul>${flags}</ul>
+      <div class="sign"><span>작성자: ____________</span><span>검토자: ____________ (서명)</span></div>
+      <div class="foot">케어브릿지 — AI가 번역·구조화한 초안을 담당자가 검토한 기록입니다. 의료적 판단을 대신하지 않습니다.</div>
+      </body></html>`;
+    const w = window.open('', '_blank');
+    if (!w) return toast('팝업이 차단되었습니다. 팝업을 허용해 주세요.');
+    w.document.write(html); w.document.close(); w.focus(); setTimeout(() => w.print(), 300);
+  }
+  $('#csvBtn').addEventListener('click', () => {
+    const f = $('#filter').value;
+    const list = S.records.filter(r => f === 'all' || r.status === f);
+    if (!list.length) return toast('내보낼 기록이 없습니다.');
+    const cell = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+    const head = ['작성일시', '언어', '근무', '작성자', '상태', '요약'].concat(Object.values(FIELDS), ['위험 신호']);
+    const lines = [head.map(cell).join(',')].concat(list.map(r => [
+      new Date(r.createdAt).toLocaleString(), LANGS[r.lang] || r.lang, r.shift, r.caregiver,
+      r.status === 'approved' ? '승인됨' : '검토 대기', show(r.result.summary_ko || '')
+    ].concat(Object.keys(FIELDS).map(k => show(r.draft[k] || '')), [riskText(r)]).map(cell).join(',')));
+    // Excel이 한글을 깨뜨리지 않도록 UTF-8 BOM을 붙인다
+    const blob = new Blob(['\ufeff' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'carebridge_records_' + new Date().toISOString().slice(0, 10) + '.csv';
+    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    toast(list.length + '건을 CSV로 저장했습니다.');
+  });
+
   function pseudo(text) { // 실명 보기 상태에서 수정한 텍스트를 다시 가명으로 저장
     let out = text; Object.keys(S.nameMap).sort((a, b) => b.length - a.length).forEach(k => { if (k.length >= 2) out = out.split(k).join(S.nameMap[k]); }); return out;
   }

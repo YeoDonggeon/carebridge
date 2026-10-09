@@ -34,6 +34,7 @@ http.createServer((req, res) => {
   fs.readFile(p, (err, buf) => {
     if (err) { res.statusCode = 404; return res.end('Not found'); }
     res.setHeader('Content-Type', TYPES[path.extname(p)] || 'application/octet-stream');
+    res.setHeader('Cache-Control', 'no-cache'); // 로컬에서 수정한 파일이 새로고침 즉시 반영되도록
     res.end(buf);
   });
 }).listen(process.env.PORT || 3000, () => {
