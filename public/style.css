@@ -97,3 +97,4 @@ table.rec tr.blank textarea{opacity:.55}
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .8s linear infinite;vertical-align:-2px;margin-right:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media (max-width:900px){.grid2,.mgr,.cols{grid-template-columns:1fr}.list{position:static;max-height:none}main{padding:12px}}
+button.small-btn{width:100%;margin:4px 0 8px;padding:6px 10px;font-size:13px}
