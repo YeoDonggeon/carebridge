@@ -6,3 +6,6 @@ demo/
 carebridge.zip
 .claude/
 CLAUDE.md
+
+.vercel
+.env*

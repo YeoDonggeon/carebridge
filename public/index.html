@@ -90,10 +90,10 @@
       <aside class="card list">
         <div class="row between">
           <h2>기록 대기열</h2>
-          <select id="filter" aria-label="필터"><option value="all">전체</option><option value="pending">검토 대기</option><option value="approved">승인됨</option></select>
+          <select id="filter" aria-label="필터"><option value="all">전체</option><option value="pending">검토 대기</option><option value="hold">보류</option><option value="approved">승인됨</option></select>
         </div>
         <div id="stats" class="stats"></div>
-        <button id="csvBtn" class="ghost small-btn" type="button" title="현재 필터의 기록을 엑셀에서 열 수 있는 CSV로 저장">⬇ CSV 내보내기</button>
+        <button id="csvBtn" class="ghost small-btn" type="button" title="승인된 기록만 엑셀에서 열 수 있는 CSV로 저장">⬇ 승인 기록 CSV 내보내기</button>
         <ul id="queue"></ul>
         <details class="roster">
           <summary>👥 대상자 명부(가명 매핑)</summary>
@@ -125,7 +125,8 @@
         <li><b>비식별화(기기 안)</b> 이름·전화번호·주민번호·주소·호실을 가명 토큰으로 바꿉니다. 원문 개인정보는 서버로 가지 않습니다.</li>
         <li><b>생성형 AI 번역·구조화</b> 요양 기록 8개 항목(신체·식사·배설·수면·인지정서·투약·활동안전·기타)으로 정리하고, 원문에 없는 내용은 만들지 않도록 제약합니다.</li>
         <li><b>위험 신호 분류</b> 즉시 보고 / 당일 확인 / 관찰 3단계, 원문 근거 인용을 함께 제시합니다.</li>
-        <li><b>사람이 최종 결정</b> AI 결과는 ‘초안’이며, 담당자가 수정·승인해야 기록이 확정됩니다.</li>
+        <li><b>사람이 최종 결정</b> AI 결과는 ‘초안’이며, 담당자가 원문 근거를 보고 승인·수정·보류를 결정합니다. 승인 전에는 복사·인쇄·가족 공유가 차단됩니다.</li>
+        <li><b>QA 게이트</b> 위험 신호의 인용문이 원문에 실제로 있는지(근거 보존), 진단·처방 표현이 없는지, 개인정보가 남지 않았는지 자동 점검합니다. 통과한 승인 기록만 가족 공유 미리보기를 열 수 있습니다.</li>
         <li><b>역방향 소통</b> 담당자 피드백을 요양보호사 언어로 번역하고, 역번역으로 의미를 검증합니다.</li>
       </ol>
       <p class="small muted">본 서비스는 2026 AI 라이프 아이디어 챌린지 수상 후보작 「케어브릿지」를 AI로 구현한 프로토타입입니다. 모든 예시 인물·수치는 가상입니다. 의료적 판단을 대신하지 않습니다.</p>
@@ -136,6 +137,7 @@
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script src="deid.js"></script>
+<script src="qa.js"></script>
 <script src="demo-data.js"></script>
 <script src="app.js"></script>
 </body>
