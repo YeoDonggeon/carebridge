@@ -10,6 +10,7 @@
     cognition_emotion: '인지·정서·행동', medication: '투약·처치', activity_safety: '활동·안전', other: '기타·연락'
   };
   const LV = { urgent: '즉시 보고', caution: '당일 확인', observe: '관찰' };
+  const ST = { pending: '검토 대기', hold: '보류', approved: '승인됨' };
   const LANGS = { vi: '베트남어', zh: '중국어', en: '영어', tl: '필리핀어', uz: '우즈베크어', ne: '네팔어', id: '인도네시아어', th: '태국어', mn: '몽골어', ru: '러시아어', ko: '한국어', km: '크메르어', my: '미얀마어' };
   const SPEECH = { vi: 'vi-VN', zh: 'zh-CN', en: 'en-US', tl: 'fil-PH', uz: 'uz-UZ', ne: 'ne-NP', id: 'id-ID', th: 'th-TH', mn: 'mn-MN', ru: 'ru-RU', ko: 'ko-KR' };
 
@@ -86,6 +87,7 @@
     const d = I18N[langSel.value] || I18N.en;
     $$('[data-i18n]', $('#tab-caregiver')).forEach(el => { if (d[el.dataset.i18n]) el.textContent = d[el.dataset.i18n]; });
     $$('[data-i18n-ph]').forEach(el => { if (d[el.dataset.i18nPh]) el.placeholder = d[el.dataset.i18nPh]; });
+    renderQuick();
     // 오른쪽 미리보기도 선택한 언어로 다시 그린다
     if (memo.value.trim() && !$('#maskedView').classList.contains('empty')) preview();
     else { $('#maskedView').className = 'masked empty'; $('#maskedView').textContent = d.emptyPreview; }
@@ -95,7 +97,28 @@
   try { const l = localStorage.getItem('cb_lang'); if (l) langSel.value = l; } catch (_) {}
   try { const n = localStorage.getItem('cb_name'); if (n) $('#cgName').value = n; } catch (_) {}
   $('#cgName').addEventListener('change', e => { try { localStorage.setItem('cb_name', e.target.value); } catch (_) {} });
-  memo.addEventListener('input', () => { $('#charCount').textContent = memo.value.length + ' / 4000'; });
+  memo.addEventListener('input', () => { $('#charCount').textContent = memo.value.length + ' / 4000'; renderQuick(); });
+
+  // 빠른 선택: 항목별 객관식 버튼. 누르면 요양보호사 언어의 문구가 메모에 한 줄로 들어가고, '기타'는 직접 쓰도록 입력창으로 보낸다.
+  function renderQuick() {
+    const lang = langSel.value, i = CBQuick.idx(lang);
+    $('#quickTitle').textContent = CBQuick.UI.title[i];
+    $('#quickBox').innerHTML = CBQuick.CATS.map((c, ci) => `<div class="qrow"><span class="qlabel">${c.icon} ${esc(c.label[i])}</span><span class="qopts">`
+      + c.opts.map((o, oi) => `<button type="button" class="qchip${CBQuick.isOn(memo.value, c, o, lang) ? ' on' : ''}" data-c="${ci}" data-o="${oi}">${esc(o[i])}</button>`).join('')
+      + `<button type="button" class="qchip etc" data-c="${ci}" data-o="etc">✏️ ${esc(CBQuick.UI.other[i])}</button></span></div>`).join('');
+  }
+  $('#quickBox').addEventListener('click', e => {
+    const b = e.target.closest('.qchip'); if (!b) return;
+    const lang = langSel.value, c = CBQuick.CATS[+b.dataset.c];
+    if (b.dataset.o === 'etc') {
+      // 기타: '항목: ' 머리말만 넣고 커서를 그 뒤에 둔다
+      memo.value = (memo.value && !memo.value.endsWith('\n') ? memo.value + '\n' : memo.value) + c.label[CBQuick.idx(lang)] + ': ';
+      memo.focus(); memo.setSelectionRange(memo.value.length, memo.value.length);
+    } else {
+      memo.value = CBQuick.toggle(memo.value, c, c.opts[+b.dataset.o], lang);
+    }
+    memo.dispatchEvent(new Event('input'));
+  });
 
   // 예시 메모
   const sampleList = $('#sampleList');
@@ -140,7 +163,14 @@
       let result;
       const demo = (window.CB_DEMO || []).find(s => s.memo.trim() === memo.value.trim());
       if (AI_LIVE) {
-        result = await callAI({ task: 'structure', text: d.masked, lang, meta: { shift: rec.shift, date: rec.createdAt.slice(0, 10) } });
+        try {
+          result = await callAI({ task: 'structure', text: d.masked, lang, meta: { shift: rec.shift, date: rec.createdAt.slice(0, 10) } });
+        } catch (e) {
+          // AI 한도 초과·장애 시에도 예시 메모는 사전 생성 결과로 흐름을 보여준다(기록에 '데모'로 표시)
+          if (!demo) throw e;
+          result = fillDemo(demo.result, d);
+          rec.demo = true;
+        }
       } else if (demo) {
         await new Promise(r => setTimeout(r, 900));
         result = fillDemo(demo.result, d);
@@ -213,15 +243,16 @@
   function renderQueue() {
     const f = $('#filter').value;
     const order = { urgent: 0, caution: 1, observe: 2, none: 3 };
+    const SORD = { pending: 0, hold: 1, approved: 2 };
     const list = S.records.filter(r => f === 'all' || r.status === f)
-      .slice().sort((a, b) => (a.status === b.status ? 0 : a.status === 'pending' ? -1 : 1) || order[topLevel(a)] - order[topLevel(b)] || b.createdAt.localeCompare(a.createdAt));
+      .slice().sort((a, b) => (SORD[a.status] - SORD[b.status]) || order[topLevel(a)] - order[topLevel(b)] || b.createdAt.localeCompare(a.createdAt));
     const cnt = { urgent: 0, caution: 0, pending: 0 };
     S.records.forEach(r => { if (r.status === 'pending') cnt.pending++; (r.result.risk_flags || []).forEach(x => { if (cnt[x.level] != null && r.status === 'pending') cnt[x.level]++; }); });
     $('#stats').innerHTML = `<div class="stat"><b>${cnt.pending}</b>검토 대기</div><div class="stat"><b style="color:var(--urgent)">${cnt.urgent}</b>즉시 보고</div><div class="stat"><b style="color:var(--caution)">${cnt.caution}</b>당일 확인</div>`;
     $('#queue').innerHTML = list.length ? list.map(r => {
       const lv = topLevel(r);
       return `<li data-id="${r.id}" class="${r.id === selectedId ? 'sel' : ''}">
-        <div class="row between"><span class="lv ${lv}">${lv === 'none' ? '특이 없음' : LV[lv]}</span><span class="st ${r.status}">${r.status === 'approved' ? '승인됨' : '검토 대기'}</span></div>
+        <div class="row between"><span class="lv ${lv}">${lv === 'none' ? '특이 없음' : LV[lv]}</span><span class="st ${r.status}">${ST[r.status] || r.status}</span></div>
         <div class="sum">${esc(show(r.result.summary_ko || '(요약 없음)'))}</div>
         <div class="meta">${esc(LANGS[r.lang] || r.lang)} · ${esc(r.shift)} · ${esc(r.caregiver)} · ${new Date(r.createdAt).toLocaleString()}${r.demo ? ' · 데모' : ''}</div>
       </li>`;
@@ -238,6 +269,7 @@
     const box = $('#detail');
     if (!r) { box.innerHTML = '<div class="empty-state"><p>왼쪽 대기열에서 기록을 선택하세요.</p></div>'; return; }
     const R = r.result;
+    const qa = CBQa.check(R, r.masked, r.draft);
     const flags = (R.risk_flags || []).map(f => `<div class="flag ${f.level}"><span class="lv ${f.level}">${LV[f.level]}</span> <b>${esc(show(f.finding))}</b> <span class="small muted">· ${esc(FIELDS[f.category] || '')}</span>
         <div class="ev">근거(원문): “${esc(show(f.evidence_source))}”</div><div class="act">➜ ${esc(show(f.action))}</div></div>`).join('') || '<p class="small muted">표시된 위험 신호가 없습니다.</p>';
     const rows = Object.keys(FIELDS).map(k => `<tr class="${r.draft[k] ? '' : 'blank'}"><th>${FIELDS[k]}</th><td><textarea data-k="${k}" rows="${Math.max(1, Math.ceil((r.draft[k] || '').length / 48))}" ${r.status === 'approved' ? 'readonly' : ''} placeholder="(원문에 언급 없음)">${esc(show(r.draft[k] || ''))}</textarea></td></tr>`).join('');
@@ -252,9 +284,11 @@
         </div>
         <label class="inline small"><input type="checkbox" id="restoreChk" style="width:auto" ${S.restore ? 'checked' : ''}> 이 기기에서 실명 보기</label>
       </div>
-      ${r.demo ? '<div class="demo-note">데모 모드: 이 결과는 예시 메모에 대해 사전 생성된 결과입니다. 실제 AI 처리는 API 키 연결 시 동작합니다.</div>' : ''}
+      ${r.demo ? `<div class="demo-note">데모 결과: 예시 메모에 대해 사전 생성된 결과입니다. ${AI_LIVE ? 'AI 호출 한도 초과 등으로 실시간 처리가 되지 않아 대신 표시했습니다.' : '실제 AI 처리는 API 키 연결 시 동작합니다.'}</div>` : ''}
       ${R.pii_residual && R.pii_residual.length ? `<div class="warn">🔎 AI가 가려지지 않은 개인정보 의심 항목을 발견했습니다: <b>${esc(R.pii_residual.join(', '))}</b> — 대상자 명부에 등록하면 다음부터 자동으로 가려집니다.</div>` : ''}
       ${r.leaks && r.leaks.length ? `<div class="warn">⚠️ AI 응답에서 원본 개인정보로 보이는 문자열이 발견되었습니다: ${esc(r.leaks.join(', '))}</div>` : ''}
+      ${r.status === 'hold' ? `<div class="warn">⏸ 보류됨${r.holdReason ? ' — ' + esc(r.holdReason) : ''}</div>` : ''}
+      <div class="qa ${qa.pass ? 'pass' : 'fail'}"><b>🛡 QA 게이트 ${qa.pass ? '통과' : '확인 필요'}</b>${qa.checks.map(c => `<span class="${c.ok ? 'ok' : 'no'}" title="${esc(c.detail)}">${c.ok ? '✔' : '⚠'} ${esc(c.label)}</span>`).join('')}${qa.pass ? '' : '<div class="small">' + qa.checks.filter(c => !c.ok).map(c => esc(c.detail)).join(' · ') + '</div>'}</div>
       <h3>⚠️ 위험 신호</h3><div class="flags">${flags}</div>
       <h3>📝 구조화 기록 초안 <span class="small muted">(수정 후 승인)</span></h3>
       <table class="rec">${rows}</table>
@@ -268,21 +302,36 @@
       ${fb}
       <div class="row gap"><input id="fbText" placeholder="예: 화장실 가실 때는 꼭 함께 가 주세요. 어지러우시면 바로 알려 주세요."><button id="fbSend" class="secondary" type="button">번역해서 보내기</button></div>
       <div class="actions">
-        <button id="copyBtn" class="ghost" type="button">📋 기록지 텍스트 복사</button>
+        ${r.status === 'approved'
+          ? `<button id="copyBtn" class="ghost" type="button">📋 기록지 텍스트 복사</button>
         <button id="printBtn" class="ghost" type="button">🖨 기록지 인쇄</button>
-        ${r.status === 'approved' ? '<button id="reopenBtn" class="ghost" type="button">승인 취소</button>' : '<button id="approveBtn" class="primary" type="button">✔ 검토 완료·승인</button>'}
-      </div>`;
+        <button id="familyBtn" class="secondary" type="button" ${qa.pass ? '' : 'disabled title="QA 게이트를 통과해야 합니다"'}>👪 가족 공유 미리보기</button>
+        <button id="reopenBtn" class="ghost" type="button">승인 취소</button>`
+          : `<span class="small muted lock">🔒 승인 전에는 복사·인쇄·가족 공유가 차단됩니다.</span>
+        ${r.status === 'hold' ? '' : '<button id="holdBtn" class="ghost" type="button">⏸ 보류</button>'}
+        <button id="approveBtn" class="primary" type="button">✔ 검토 완료·승인</button>`}
+      </div>
+      <div id="familyBox"></div>`;
 
     $$('textarea[data-k]', box).forEach(t => t.addEventListener('input', () => { r.draft[t.dataset.k] = S.restore ? pseudo(t.value) : t.value; save(); }));
     $('#restoreChk').addEventListener('change', e => { S.restore = e.target.checked; save(); renderQueue(); renderDetail(); });
-    $('#copyBtn').addEventListener('click', () => {
+    const cb = $('#copyBtn'); if (cb) cb.addEventListener('click', () => {
       const txt = `[돌봄 관찰기록] ${new Date(r.createdAt).toLocaleDateString()} ${r.shift} / 작성: ${r.caregiver} (${LANGS[r.lang] || r.lang} 원문, AI 초안 검토)\n` +
         Object.keys(FIELDS).filter(k => r.draft[k]).map(k => `- ${FIELDS[k]}: ${show(r.draft[k])}`).join('\n') +
         ((R.risk_flags || []).length ? '\n[위험 신호]\n' + R.risk_flags.map(f => `- (${LV[f.level]}) ${show(f.finding)} → ${show(f.action)}`).join('\n') : '');
       (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => toast('복사되었습니다.'), () => { prompt('복사할 내용', txt); });
     });
-    $('#printBtn').addEventListener('click', () => printRecord(r));
-    const ab = $('#approveBtn'); if (ab) ab.addEventListener('click', () => { r.status = 'approved'; r.approvedAt = new Date().toISOString(); save(); renderQueue(); renderDetail(); toast('승인되었습니다.'); });
+    const pb = $('#printBtn'); if (pb) pb.addEventListener('click', () => printRecord(r));
+    const fb2 = $('#familyBtn'); if (fb2) fb2.addEventListener('click', () => showFamily(r));
+    const hb = $('#holdBtn'); if (hb) hb.addEventListener('click', () => {
+      const reason = prompt('보류 사유 (예: 낙상 시각 확인 필요)', '');
+      if (reason === null) return;
+      r.status = 'hold'; r.holdReason = reason.trim(); save(); renderQueue(); renderDetail(); toast('보류되었습니다.');
+    });
+    const ab = $('#approveBtn'); if (ab) ab.addEventListener('click', () => {
+      const q = CBQa.check(R, r.masked, r.draft);
+      if (!q.pass && !confirm('QA 게이트에서 확인이 필요한 항목이 있습니다.\n- ' + q.checks.filter(c => !c.ok).map(c => c.detail).join('\n- ') + '\n\n그래도 승인할까요? (가족 공유는 QA 통과 후에만 가능합니다)')) return;
+      r.status = 'approved'; r.holdReason = ''; r.approvedAt = new Date().toISOString(); save(); renderQueue(); renderDetail(); toast('승인되었습니다.'); });
     const rb = $('#reopenBtn'); if (rb) rb.addEventListener('click', () => { r.status = 'pending'; save(); renderQueue(); renderDetail(); });
     $('#fbSend').addEventListener('click', async () => {
       const ko = $('#fbText').value.trim(); if (!ko) return;
@@ -291,8 +340,14 @@
         const koMasked = CBDeid.deidentify(ko, { roster: S.roster, nameMap: S.nameMap }).masked;
         let out;
         if (r.lang === 'ko') out = { translation: ko, back_translation_ko: '(한국어 — 번역 불필요)' };
-        else if (AI_LIVE) out = await callAI({ task: 'feedback', text: koMasked, targetLang: r.lang });
-        else {
+        else if (AI_LIVE) {
+          try { out = await callAI({ task: 'feedback', text: koMasked, targetLang: r.lang }); }
+          catch (e) {
+            const d = r.demo && (window.CB_DEMO_FEEDBACK || {})[r.lang];
+            if (!d) throw e;
+            out = d; toast('AI 연결이 원활하지 않아 사전 생성된 예시 번역을 보여줍니다.');
+          }
+        } else {
           const d = (window.CB_DEMO_FEEDBACK || {})[r.lang];
           if (!d) throw new Error('데모 모드에서는 예시 언어만 번역할 수 있습니다.');
           await new Promise(res => setTimeout(res, 700));
@@ -318,7 +373,7 @@
       table{width:100%;border-collapse:collapse;margin:8px 0 16px}th,td{border:1px solid #999;padding:6px 8px;vertical-align:top;text-align:left}
       th{width:120px;background:#f2f2f2}.na{color:#999}h2{font-size:14px;margin:16px 0 4px}ul{margin:4px 0;padding-left:18px}li{margin-bottom:6px}
       .sign{margin-top:28px;display:flex;gap:48px}.foot{margin-top:16px;color:#777;font-size:11px}</style></head><body>
-      <h1>돌봄 관찰기록 ${r.status === 'approved' ? '' : '(검토 전 초안)'}</h1>
+      <h1>돌봄 관찰기록</h1>
       <div class="meta">${new Date(r.createdAt).toLocaleString()} · ${esc(r.shift)} 근무 · 작성 ${esc(r.caregiver)} (${esc(LANGS[r.lang] || r.lang)} 원문)${r.approvedAt ? ' · 승인 ' + new Date(r.approvedAt).toLocaleString() : ''}</div>
       <div><b>요약</b> ${esc(show(R.summary_ko || ''))}</div>
       <table>${rows}</table>
@@ -330,15 +385,25 @@
     if (!w) return toast('팝업이 차단되었습니다. 팝업을 허용해 주세요.');
     w.document.write(html); w.document.close(); w.focus(); setTimeout(() => w.print(), 300);
   }
+  // 가족 공유 미리보기: 승인되고 QA를 통과한 기록만, 담당자가 직접 눌러야 열린다(자동 공유 없음).
+  // 위험 등급·AI 판단 문구는 빼고 담당자가 승인한 기록 항목만 쉬운 말로 보여준다.
+  function showFamily(r) {
+    if (r.status !== 'approved' || !CBQa.check(r.result, r.masked, r.draft).pass) return toast('승인되고 QA를 통과한 기록만 미리볼 수 있습니다.');
+    const items = Object.keys(FIELDS).filter(k => r.draft[k]).map(k => `<li><b>${FIELDS[k]}</b> ${esc(show(r.draft[k]))}</li>`).join('');
+    $('#familyBox').innerHTML = `<div class="family"><h3>👪 가족 공유 미리보기 <span class="small muted">(전송 전 확인용 · 자동 전송되지 않습니다)</span></h3>
+      <p>${new Date(r.createdAt).toLocaleDateString()} ${esc(r.shift)} 돌봄 기록을 안내드립니다.</p><ul>${items}</ul>
+      <p class="small muted">담당자가 검토·승인한 기록입니다(${new Date(r.approvedAt).toLocaleString()}). 궁금한 점은 기관으로 문의해 주세요.</p></div>`;
+    $('#familyBox').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
   $('#csvBtn').addEventListener('click', () => {
-    const f = $('#filter').value;
-    const list = S.records.filter(r => f === 'all' || r.status === f);
-    if (!list.length) return toast('내보낼 기록이 없습니다.');
+    // 승인 전 기록은 외부로 내보내지 않는다
+    const list = S.records.filter(r => r.status === 'approved');
+    if (!list.length) return toast('승인된 기록이 없습니다. 승인 전 기록은 내보낼 수 없습니다.');
     const cell = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
     const head = ['작성일시', '언어', '근무', '작성자', '상태', '요약'].concat(Object.values(FIELDS), ['위험 신호']);
     const lines = [head.map(cell).join(',')].concat(list.map(r => [
       new Date(r.createdAt).toLocaleString(), LANGS[r.lang] || r.lang, r.shift, r.caregiver,
-      r.status === 'approved' ? '승인됨' : '검토 대기', show(r.result.summary_ko || '')
+      ST[r.status], show(r.result.summary_ko || '')
     ].concat(Object.keys(FIELDS).map(k => show(r.draft[k] || '')), [riskText(r)]).map(cell).join(',')));
     // Excel이 한글을 깨뜨리지 않도록 UTF-8 BOM을 붙인다
     const blob = new Blob(['\ufeff' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });

@@ -76,3 +76,58 @@ test('개발셋 기준 성능이 떨어지지 않는다 (재현율 ≥ 98%, 정�
   assert.ok((100 * hit / total).toFixed(1) >= 98.0, `재현율 ${(100 * hit / total).toFixed(1)}%`);
   assert.strictEqual(trueEnts, ents, '과잉 가림 발생');
 });
+
+// QA 게이트(public/qa.js): 근거 보존·금지표현 점검
+const qa = require('../public/qa.js');
+
+test('QA: 인용문이 원문에 있으면 근거 보존, 없으면 실패', () => {
+  const src = 'Buổi chiều bà bị chóng mặt, suýt ngã. Uống nước ít, khoảng 2 cốc.';
+  assert.ok(qa.isGrounded('bà bị chóng mặt, suýt ngã', src));
+  assert.ok(qa.isGrounded('“bị chóng mặt … khoảng 2 cốc”', src), '떨어진 구절을 …로 이은 인용');
+  assert.ok(!qa.isGrounded('bà bị sốt cao', src));
+  assert.ok(!qa.isGrounded('', src));
+});
+
+test('QA: 진단·처방 표현과 잔여 개인정보가 있으면 게이트를 통과하지 못한다', () => {
+  const base = { summary_ko: '식사 저하', record: { meal: '죽 1/3 섭취' }, risk_flags: [{ finding: '섭취 저하', action: '섭취량 관찰', evidence_source: 'ăn 1/3' }], pii_residual: [] };
+  assert.ok(qa.check(base, 'bà ăn 1/3 bát cháo').pass);
+  assert.ok(!qa.check(base, 'bà ăn 1/3 bát cháo', { meal: '탈수로 진단됨' }).pass);
+  assert.ok(!qa.check(Object.assign({}, base, { pii_residual: ['Young-ja'] }), 'bà ăn 1/3 bát cháo').pass);
+});
+
+test('QA: 데모 예시 결과는 모두 게이트를 통과한다', () => {
+  global.window = {};
+  require('../public/demo-data.js');
+  const demo = global.window.CB_DEMO;
+  assert.ok(demo.length >= 4);
+  for (const s of demo) {
+    const d = deidentify(s.memo);
+    const name = (d.entities.find(e => e.type === 'NAME') || {}).token || '[어르신A]';
+    const res = JSON.parse(JSON.stringify(s.result).split('{{N}}').join(name).split('{{R}}').join('[호실]'));
+    const r = qa.check(res, d.masked);
+    assert.ok(r.pass, s.label + ' → ' + r.checks.filter(c => !c.ok).map(c => c.detail).join(' / '));
+  }
+});
+
+// 빠른 선택(public/quick.js): 객관식 문구가 메모에 들어가고, 비식별 엔진이 그 문구를 개인정보로 오인하지 않아야 한다
+const quick = require('../public/quick.js');
+
+test('빠른 선택: 항목당 하나만 선택되고 다시 누르면 지워진다', () => {
+  const meal = quick.CATS.find(c => c.key === 'meal');
+  let memo = quick.toggle('', meal, meal.opts[1], 'vi');
+  assert.strictEqual(memo, 'Ăn uống: Ăn một nửa');
+  memo = quick.toggle(memo + '\nBà vui vẻ.', meal, meal.opts[3], 'vi');
+  assert.ok(!memo.includes('Ăn một nửa') && memo.includes('Ăn uống: Không chịu ăn') && memo.includes('Bà vui vẻ.'), memo);
+  assert.ok(quick.isOn(memo, meal, meal.opts[3], 'vi'));
+  memo = quick.toggle(memo, meal, meal.opts[3], 'vi');
+  assert.strictEqual(memo, 'Bà vui vẻ.');
+});
+
+test('빠른 선택: 어떤 언어의 선택 문구도 비식별에서 가려지지 않는다', () => {
+  for (const lang of ['ko', 'vi', 'zh', 'en']) {
+    for (const c of quick.CATS) for (const o of c.opts) {
+      const l = quick.line(c, o, lang);
+      assert.strictEqual(deidentify(l).masked, l, `${lang}: ${l}`);
+    }
+  }
+});

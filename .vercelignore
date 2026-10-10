@@ -1,0 +1,12 @@
+node_modules
+.env
+.env.*
+!.env.example
+.vercel
+submission/
+demo/
+carebridge.zip
+.claude/
+CLAUDE.md
+test/
+server.js

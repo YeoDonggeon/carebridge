@@ -1,0 +1,532 @@
+{
+  "summary": {
+    "model": "gemini-3.5-flash-lite",
+    "samples": 36,
+    "json_valid": "100.0%",
+    "risk_recall": "97.2%",
+    "false_urgent": 1,
+    "numeric_fidelity": "95.0%",
+    "numeric_fidelity_strict": "80.0%",
+    "evidence_grounded": "100.0%",
+    "pii_leak_cases": 0,
+    "avg_latency_sec": "2.18"
+  },
+  "rows": [
+    {
+      "id": "vi01",
+      "lang": "vi",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "urgent": [
+          "낙상"
+        ],
+        "caution": [
+          "식사"
+        ]
+      },
+      "got": [
+        "urgent:낙상 — 오후 배변 시 어지러움으로 인한 낙상 직전 발생",
+        "caution:섭취 저하 — 아침 죽 1/3만 섭취"
+      ],
+      "summary": "아침 섭취 저하 및 오후 화장실 이용 중 낙상 직전 아차사고 발생"
+    },
+    {
+      "id": "vi02",
+      "lang": "vi",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {},
+      "got": [],
+      "summary": "[어르신A] 야간 수면 양호 및 아침 식사 전량 섭취"
+    },
+    {
+      "id": "vi03",
+      "lang": "vi",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "urgent": [
+          "발열",
+          "호흡"
+        ]
+      },
+      "got": [
+        "urgent:발열 — 38℃ 이상 발열 (14시 체온 38.5℃)",
+        "urgent:호흡곤란 — 숨을 조금 힘겹게 쉼"
+      ],
+      "summary": "38.5도 발열, 기침, 호흡 곤란 관찰됨"
+    },
+    {
+      "id": "vi04",
+      "lang": "vi",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "caution": [
+          "배변"
+        ]
+      },
+      "got": [
+        "caution:무배변 — 4일 이상 무배변 및 복부 팽만 관찰됨"
+      ],
+      "summary": "[어르신A] 어르신 4일간 무배변 및 복부 팽만 관찰됨"
+    },
+    {
+      "id": "vi05",
+      "lang": "vi",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "caution": [
+          "투약"
+        ]
+      },
+      "got": [
+        "caution:투약 거부 — 저녁 약 복용 거부 및 뱉어냄"
+      ],
+      "summary": "[어르신A] 저녁 약 복용 거부 및 뱉어냄"
+    },
+    {
+      "id": "vi06",
+      "lang": "vi",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "caution": [
+          "식사"
+        ]
+      },
+      "got": [
+        "caution:섭취 저하 — 식사 절반 섭취"
+      ],
+      "summary": "[어르신A] 식사 절반 섭취, 기분 양호"
+    },
+    {
+      "id": "vi07",
+      "lang": "vi",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "caution": [
+          "욕창",
+          "발적"
+        ]
+      },
+      "got": [
+        "caution:욕창 의심 — 엉덩이 부위 피부 발적"
+      ],
+      "summary": "[어르신A] 님 엉덩이 부위 피부 발적 관찰 및 체위 변경 실시함"
+    },
+    {
+      "id": "zh01",
+      "lang": "zh",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "caution": [
+          "배회",
+          "배변"
+        ]
+      },
+      "got": [
+        "caution:무배변 — 3일 동안 대변을 못 보심",
+        "caution:야간 배회·섬망 의심 — 밤 11시에 복도를 걸어 다니고 요양보호사를 알아보지 못하심"
+      ],
+      "summary": "[어르신A] 3일간 무배변 및 복부 팽만, 야간 배회 및 인지 저하 관찰됨"
+    },
+    {
+      "id": "zh02",
+      "lang": "zh",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "urgent": [
+          "사레",
+          "흡인"
+        ]
+      },
+      "got": [
+        "urgent:사레(흡인 위험) — 식사 중 여러 차례 사레 들림, 물 마실 때 기침"
+      ],
+      "summary": "[어르신A] 식사 및 음수 시 사레 및 기침 발생"
+    },
+    {
+      "id": "zh03",
+      "lang": "zh",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "urgent": [
+          "흉부",
+          "혈압"
+        ]
+      },
+      "got": [
+        "urgent:흉부 답답함 — 오후 가슴 답답함 호소",
+        "urgent:혈압 상승 — 수축기 혈압 160 이상 (170/95)"
+      ],
+      "summary": "[어르신A] 오후 가슴 답답함 및 고혈압(170/95) 발생"
+    },
+    {
+      "id": "zh04",
+      "lang": "zh",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {},
+      "got": [],
+      "summary": "[어르신A] 어르신 목욕 완료, 기분 양호, 점심 전량 섭취"
+    },
+    {
+      "id": "zh05",
+      "lang": "zh",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {},
+      "got": [],
+      "summary": "[어르신A] 보호자(딸) 주말 방문 예정"
+    },
+    {
+      "id": "zh06",
+      "lang": "zh",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "observe": [
+          "수면"
+        ]
+      },
+      "got": [
+        "observe:수면 양상 변화 — 옆방 소음으로 인한 수면 방해"
+      ],
+      "summary": "옆방 소음으로 인한 어르신 수면 방해 발생"
+    },
+    {
+      "id": "en01",
+      "lang": "en",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "urgent": [
+          "사레",
+          "흡인"
+        ]
+      },
+      "got": [
+        "urgent:사레(흡인 위험) — 식사 중 기침 및 삼킨 후 젖은 목소리 관찰됨"
+      ],
+      "summary": "[어르신A]님 점심 식사 중 사레 및 젖은 목소리 관찰됨"
+    },
+    {
+      "id": "en02",
+      "lang": "en",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "urgent": [
+          "낙상"
+        ]
+      },
+      "got": [
+        "urgent:낙상 — 침대 근처 낙상 발생"
+      ],
+      "summary": "[어르신A] 침대 근처 낙상 발생 및 우측 팔 타박상 확인"
+    },
+    {
+      "id": "en03",
+      "lang": "en",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "caution": [
+          "식사"
+        ]
+      },
+      "got": [
+        "urgent:심한 통증 — 복통 호소",
+        "caution:섭취 저하 — 저녁 식사 거부, 주스만 마심"
+      ],
+      "false_urgent": true,
+      "summary": "[어르신A] 저녁 거부 및 주스 섭취, 복통 호소"
+    },
+    {
+      "id": "en04",
+      "lang": "en",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {},
+      "got": [],
+      "summary": "[어르신A] 차분한 상태 유지, 운동 참여 및 낮잠 2시간 관찰됨"
+    },
+    {
+      "id": "en05",
+      "lang": "en",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {},
+      "got": [],
+      "summary": "보호자(딸)가 금요일 병원 진료 일정 문의함"
+    },
+    {
+      "id": "en06",
+      "lang": "en",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "caution": [
+          "소변",
+          "수분"
+        ]
+      },
+      "got": [
+        "caution:소변 색 변화 — 어두운 소변 관찰됨",
+        "caution:섭취 저하 — 물을 매우 적게 마심"
+      ],
+      "summary": "[호실] 어르신 소변 색 어두움 및 수분 섭취 저하 관찰됨"
+    },
+    {
+      "id": "en07",
+      "lang": "en",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "urgent": [
+          "흉통"
+        ]
+      },
+      "got": [
+        "urgent:흉통 — 산책 후 10분 동안 흉통 지속"
+      ],
+      "summary": "[어르신A] 산책 후 10분간 흉통 발생 및 혈압 측정"
+    },
+    {
+      "id": "en08",
+      "lang": "en",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {},
+      "got": [],
+      "summary": "[어르신A] 어르신이 라디오 음악을 들으며 미소 지으며 노래 부르심"
+    },
+    {
+      "id": "tl01",
+      "lang": "tl",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "caution": [
+          "식사"
+        ]
+      },
+      "got": [
+        "caution:섭취 저하 — 아침 식사 거부 및 복통 호소"
+      ],
+      "summary": "[어르신A] 어르신 복통 호소 및 아침 식사 거부"
+    },
+    {
+      "id": "tl02",
+      "lang": "tl",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "urgent": [
+          "낙상"
+        ]
+      },
+      "got": [
+        "urgent:낙상 — 화장실 낙상 및 무릎 상처 발생"
+      ],
+      "summary": "[어르신A] 어르신 화장실 낙상 및 무릎 상처 발생"
+    },
+    {
+      "id": "tl03",
+      "lang": "tl",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "caution": [
+          "식사"
+        ]
+      },
+      "got": [
+        "caution:섭취 저하 — 점심 절반 섭취"
+      ],
+      "summary": "[어르신A] 어르신 점심 섭취 저하 및 수면 양호"
+    },
+    {
+      "id": "id01",
+      "lang": "id",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "caution": [
+          "투약"
+        ]
+      },
+      "got": [
+        "caution:투약 거부 — 아침 약을 거부하고 뱉어냄"
+      ],
+      "summary": "[어르신A] 아침 투약 거부 및 뱉어냄 관찰"
+    },
+    {
+      "id": "id02",
+      "lang": "id",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "urgent": [
+          "낙상"
+        ]
+      },
+      "got": [
+        "urgent:낙상 — 휠체어에서 낙상, 머리 부딪힘"
+      ],
+      "summary": "[어르신A] 휠체어 낙상 및 머리 부딪힘 발생, 간호사 보고 완료"
+    },
+    {
+      "id": "ko01",
+      "lang": "ko",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "urgent": [
+          "흉부"
+        ],
+        "caution": [
+          "투약"
+        ]
+      },
+      "got": [
+        "urgent:흉부 답답함 — 오후 가슴 답답함 호소 및 수축기 혈압 160 이상",
+        "caution:투약 거부 — 아침 약 복용 거부 및 뱉음"
+      ],
+      "summary": "아침 투약 거부 및 오후 흉부 답답함, 고혈압 관찰됨"
+    },
+    {
+      "id": "ko02",
+      "lang": "ko",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {},
+      "got": [],
+      "summary": "[어르신A] 점심 식사 완료, 30분 산책 후 기분 좋으심."
+    },
+    {
+      "id": "ko03",
+      "lang": "ko",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "observe": [
+          "수면"
+        ]
+      },
+      "got": [
+        "observe:수면 양상 변화 — 밤에 3회 기상함"
+      ],
+      "summary": "야간 배뇨 및 잦은 기상 관찰"
+    },
+    {
+      "id": "ko04",
+      "lang": "ko",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {},
+      "got": [],
+      "summary": "보호자 내일 방문 예정"
+    },
+    {
+      "id": "ko05",
+      "lang": "ko",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "caution": [
+          "발적",
+          "피부"
+        ]
+      },
+      "got": [
+        "caution:욕창 의심 — 등에 빨간 거 있음"
+      ],
+      "summary": "[어르신A] 등 부위 피부 발적 및 통증 관찰됨"
+    },
+    {
+      "id": "ko06",
+      "lang": "ko",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "caution": [
+          "수분"
+        ]
+      },
+      "got": [
+        "caution:섭취 저하 — 저녁 식사 절반 섭취 및 수분 섭취 부족"
+      ],
+      "num_miss": [
+        "50"
+      ],
+      "record": {
+        "physical": "",
+        "meal": "저녁 식사 50% 섭취함, 수분 섭취 부족 관찰됨",
+        "excretion": "",
+        "sleep": "",
+        "cognition_emotion": "",
+        "medication": "",
+        "activity_safety": "",
+        "other": ""
+      },
+      "source": "저녁 할머니 식사 반 드셨어요. 이 할머니 물 잘 안 마셔요.",
+      "summary": "저녁 식사 반 섭취, 수분 섭취 부족"
+    },
+    {
+      "id": "ko07",
+      "lang": "ko",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {},
+      "got": [],
+      "summary": "어르신A 주민등록번호 및 주소 서류 필요"
+    },
+    {
+      "id": "ko08",
+      "lang": "ko",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {},
+      "got": [],
+      "summary": "어르신 전체 체온 측정 결과 모두 정상임"
+    },
+    {
+      "id": "uz01",
+      "lang": "uz",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "caution": [
+          "식사"
+        ]
+      },
+      "got": [
+        "caution:섭취 저하 — 아침 식사 안 함"
+      ],
+      "summary": "[어르신A] 아침 식사 거부 및 어지러움 호소"
+    },
+    {
+      "id": "ne01",
+      "lang": "ne",
+      "error": null,
+      "model": "gemini-3.5-flash-lite",
+      "expected": {
+        "caution": [
+          "식사"
+        ]
+      },
+      "got": [
+        "caution:섭취 저하 — 오늘 식사를 절반만 드심"
+      ],
+      "summary": "[어르신A] 섭취 저하 및 야간 수면 중 기상 관찰"
+    }
+  ]
+}
