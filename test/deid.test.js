@@ -108,3 +108,26 @@ test('QA: 데모 예시 결과는 모두 게이트를 통과한다', () => {
     assert.ok(r.pass, s.label + ' → ' + r.checks.filter(c => !c.ok).map(c => c.detail).join(' / '));
   }
 });
+
+// 빠른 선택(public/quick.js): 객관식 문구가 메모에 들어가고, 비식별 엔진이 그 문구를 개인정보로 오인하지 않아야 한다
+const quick = require('../public/quick.js');
+
+test('빠른 선택: 항목당 하나만 선택되고 다시 누르면 지워진다', () => {
+  const meal = quick.CATS.find(c => c.key === 'meal');
+  let memo = quick.toggle('', meal, meal.opts[1], 'vi');
+  assert.strictEqual(memo, 'Ăn uống: Ăn một nửa');
+  memo = quick.toggle(memo + '\nBà vui vẻ.', meal, meal.opts[3], 'vi');
+  assert.ok(!memo.includes('Ăn một nửa') && memo.includes('Ăn uống: Không chịu ăn') && memo.includes('Bà vui vẻ.'), memo);
+  assert.ok(quick.isOn(memo, meal, meal.opts[3], 'vi'));
+  memo = quick.toggle(memo, meal, meal.opts[3], 'vi');
+  assert.strictEqual(memo, 'Bà vui vẻ.');
+});
+
+test('빠른 선택: 어떤 언어의 선택 문구도 비식별에서 가려지지 않는다', () => {
+  for (const lang of ['ko', 'vi', 'zh', 'en']) {
+    for (const c of quick.CATS) for (const o of c.opts) {
+      const l = quick.line(c, o, lang);
+      assert.strictEqual(deidentify(l).masked, l, `${lang}: ${l}`);
+    }
+  }
+});

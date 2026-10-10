@@ -87,6 +87,7 @@
     const d = I18N[langSel.value] || I18N.en;
     $$('[data-i18n]', $('#tab-caregiver')).forEach(el => { if (d[el.dataset.i18n]) el.textContent = d[el.dataset.i18n]; });
     $$('[data-i18n-ph]').forEach(el => { if (d[el.dataset.i18nPh]) el.placeholder = d[el.dataset.i18nPh]; });
+    renderQuick();
     // 오른쪽 미리보기도 선택한 언어로 다시 그린다
     if (memo.value.trim() && !$('#maskedView').classList.contains('empty')) preview();
     else { $('#maskedView').className = 'masked empty'; $('#maskedView').textContent = d.emptyPreview; }
@@ -96,7 +97,28 @@
   try { const l = localStorage.getItem('cb_lang'); if (l) langSel.value = l; } catch (_) {}
   try { const n = localStorage.getItem('cb_name'); if (n) $('#cgName').value = n; } catch (_) {}
   $('#cgName').addEventListener('change', e => { try { localStorage.setItem('cb_name', e.target.value); } catch (_) {} });
-  memo.addEventListener('input', () => { $('#charCount').textContent = memo.value.length + ' / 4000'; });
+  memo.addEventListener('input', () => { $('#charCount').textContent = memo.value.length + ' / 4000'; renderQuick(); });
+
+  // 빠른 선택: 항목별 객관식 버튼. 누르면 요양보호사 언어의 문구가 메모에 한 줄로 들어가고, '기타'는 직접 쓰도록 입력창으로 보낸다.
+  function renderQuick() {
+    const lang = langSel.value, i = CBQuick.idx(lang);
+    $('#quickTitle').textContent = CBQuick.UI.title[i];
+    $('#quickBox').innerHTML = CBQuick.CATS.map((c, ci) => `<div class="qrow"><span class="qlabel">${c.icon} ${esc(c.label[i])}</span><span class="qopts">`
+      + c.opts.map((o, oi) => `<button type="button" class="qchip${CBQuick.isOn(memo.value, c, o, lang) ? ' on' : ''}" data-c="${ci}" data-o="${oi}">${esc(o[i])}</button>`).join('')
+      + `<button type="button" class="qchip etc" data-c="${ci}" data-o="etc">✏️ ${esc(CBQuick.UI.other[i])}</button></span></div>`).join('');
+  }
+  $('#quickBox').addEventListener('click', e => {
+    const b = e.target.closest('.qchip'); if (!b) return;
+    const lang = langSel.value, c = CBQuick.CATS[+b.dataset.c];
+    if (b.dataset.o === 'etc') {
+      // 기타: '항목: ' 머리말만 넣고 커서를 그 뒤에 둔다
+      memo.value = (memo.value && !memo.value.endsWith('\n') ? memo.value + '\n' : memo.value) + c.label[CBQuick.idx(lang)] + ': ';
+      memo.focus(); memo.setSelectionRange(memo.value.length, memo.value.length);
+    } else {
+      memo.value = CBQuick.toggle(memo.value, c, c.opts[+b.dataset.o], lang);
+    }
+    memo.dispatchEvent(new Event('input'));
+  });
 
   // 예시 메모
   const sampleList = $('#sampleList');
